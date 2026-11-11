@@ -1,0 +1,9 @@
+build/
+.gradle/
+.idea/
+.vscode/
+run/
+*.log
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+!libs/.gitkeep

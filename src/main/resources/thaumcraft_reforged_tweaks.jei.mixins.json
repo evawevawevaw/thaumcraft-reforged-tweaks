@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.reforgedtweaks.integration.jei.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "dev.reforgedtweaks.integration.jei.JeiMixinPlugin",
+  "refmap": "thaumcraft_reforged_tweaks.refmap.json",
+  "client": [
+    "TrtCrucibleMixin",
+    "TrtArcaneMixin",
+    "TrtInfusionMixin",
+    "TrtEnchantmentMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

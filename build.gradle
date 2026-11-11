@@ -1,0 +1,55 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+version = '0.3.15'
+group = 'dev.reforgedtweaks'
+base { archivesName = 'thaumcraft-reforged-tweaks-1.21.1' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+repositories {
+    maven { url = 'https://maven.terraformersmc.com/releases/'; content { includeGroup 'dev.emi' } }
+    mavenCentral { content { includeGroup 'junit'; includeGroup 'org.hamcrest' } }
+    maven { url = 'https://maven.fabricmc.net/'; content { includeGroup 'net.fabricmc' } }
+    maven { url = 'https://maven.blamejared.com/'; content { includeGroup 'mezz.jei' } }
+}
+neoForge {
+    version = '21.1.256'
+    parchment {
+        minecraftVersion = '1.21.1'
+        mappingsVersion = '2024.11.17'
+    }
+    mods { thaumcraft_reforged_tweaks { sourceSet(sourceSets.main) } }
+}
+dependencies {
+    compileOnly 'dev.emi:emi-neoforge:1.1.24+1.21.1'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+    annotationProcessor 'net.fabricmc:sponge-mixin:0.16.4+mixin.0.8.7'
+    annotationProcessor 'org.ow2.asm:asm-tree:9.9.1'
+    annotationProcessor 'com.google.guava:guava:32.1.2-jre'
+    annotationProcessor 'com.google.code.gson:gson:2.10.1'
+    compileOnly files('libs/thaumcraft-4-reforged-1.1.2-1.21.1.jar')
+    compileOnly files('libs/witching-gadgets-reforged-1.0-1.21.1.jar')
+    compileOnly 'mezz.jei:jei-1.21.1-common-api:19.57.0.451'
+    compileOnly 'mezz.jei:jei-1.21.1-neoforge-api:19.57.0.451'
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+
+// All targets are unmapped mod classes (remap=false); AP still emits the packaged refmap.
+var refmap = layout.buildDirectory.file('generated/mixin/thaumcraft_reforged_tweaks.refmap.json')
+tasks.named('compileJava', JavaCompile) {
+    doFirst { refmap.get().asFile.parentFile.mkdirs() }
+    options.compilerArgs += ["-AoutRefMapFile=${refmap.get().asFile}"]
+    outputs.file(refmap)
+}
+tasks.named('processResources') {
+    dependsOn tasks.named('compileJava')
+    from(refmap) { into '' }
+}
+tasks.named('jar') {
+    from('LICENSE')
+    from('THIRD_PARTY_NOTICES.md')
+}
+
+// Pure Java regression tests only; no Minecraft bootstrap or run tasks.
+tasks.named('test', Test) { useJUnit() }
