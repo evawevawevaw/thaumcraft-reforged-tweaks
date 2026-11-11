@@ -1,5 +1,3 @@
-<p align="center"><img src="src/main/resources/thaumcraft-reforged-tweaks.png" width="500" alt="Thaumcraft Reforged Tweaks"></p>
-
 # Thaumcraft Reforged Tweaks
 
 Client-side quality-of-life addon for [Thaumcraft 4 Reforged](https://github.com/notlikethiss/thaumcraft-4-reforged) on Minecraft 1.21.1 and NeoForge.
